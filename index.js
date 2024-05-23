@@ -10,6 +10,10 @@ const templateDir = path.join(__dirname, 'template');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Endpoint to create a new directory with template files
 app.post('/create-directory', (req, res) => {
     const dirName = req.body.directoryName;
     const dirPath = path.join(__dirname, dirName);
@@ -24,6 +28,11 @@ app.post('/create-directory', (req, res) => {
     } else {
         res.status(400).send(`Directory ${dirName} already exists.`);
     }
+});
+
+// Serve the index.html file at the root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(port, () => {
