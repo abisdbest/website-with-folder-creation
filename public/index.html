@@ -1,3 +1,5 @@
+<button>hi!</button>
+<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +9,27 @@
 </head>
 <body>
     <h1>Create a New Directory</h1>
-    <form action="/create-directory" method="POST">
-        <label for="directoryName">Directory Name:</label>
-        <input type="text" id="directoryName" name="directoryName" required>
+    <form id="directoryForm">
+        <label for="dirName">Directory Name:</label>
+        <input type="text" id="dirName" name="dirName" required>
         <button type="submit">Create</button>
     </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('directoryForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const dirName = document.getElementById('dirName').value;
+            const response = await fetch('/api/create-directory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ dirName })
+            });
+            const result = await response.json();
+            document.getElementById('result').textContent = result.message || result.error;
+        });
+    </script>
 </body>
 </html>
